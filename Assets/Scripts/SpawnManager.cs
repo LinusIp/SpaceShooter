@@ -1,4 +1,4 @@
-using System.Collections;
+
 using UnityEngine;
 
 
@@ -24,6 +24,7 @@ public class SpawnManager : MonoBehaviour
     private int _skip;
     private GameObject _enemy;
     private GameObject _asteroid;
+    private bool _isBossSpawn = false;
 
     public void StartSpawning()
     {
@@ -75,26 +76,31 @@ public class SpawnManager : MonoBehaviour
             int enemiesInThisWave = _firstWave + (_incrementWaveBy * (_currentWave - 1));
             for(int i = 0; i < enemiesInThisWave; i++)
             {
-                if(i % 5 == 0 && i != 0)
+
+                if(i < 12)
                 {
+                    if (i % 5 == 0 && i != 0)
+                    {
+                        EnemySpawn();
+                        Enemy enemy = _enemy.transform.GetComponent<Enemy>();
+                        enemy.EnemyShieldActive();
+                    }
+                    yield return new WaitForSeconds(2.0f);
                     EnemySpawn();
-                    Enemy enemy = _enemy.transform.GetComponent<Enemy>();
-                    enemy.EnemyShieldActive();
                 }
-                yield return new WaitForSeconds(2.0f);
-                EnemySpawn();
+               
             }
             yield return new WaitUntil(() =>
             _stopSpawning || _enemyContainer != null && _enemyContainer.transform.childCount == 0);
 
             yield return new WaitForSeconds(3.0f);
 
-            if(_currentWave == 3)
+            _currentWave++;
+
+            if(_currentWave  == 2)
             {
                 BossSpawn();
             }
-
-            _currentWave++;
         }
     }
 

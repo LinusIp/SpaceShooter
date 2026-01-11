@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+
 
 public class Player : MonoBehaviour
 {
@@ -44,19 +44,17 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioSource _audioSource;
     public Color normal_color = Color.white;
-    public Color boost_color = new Color(233f / 255f, 142f / 255f, 25f / 255f);
+    public Color boost_color = new Color(233f, 142f, 25f);
     [SerializeField]
     private SpriteRenderer _thrustRenderer;
     [SerializeField]
     private SpriteRenderer _shieldRenderer;
     private int _shieldUsage;
-    private Color _firstHit = new Color(255f / 255f, 255f / 255f, 255f / 255f, 190f / 255f);
-    private Color _secondHit = new Color(255f / 255f, 255f / 255f, 255f / 255f, 150f / 255f);
+    private Color _firstHit = new Color(255f, 255f, 255f, 190f);
+    private Color _secondHit = new Color(255f, 255f, 255f, 150f);
     private int _ammoAmount = 15;
     private Animator _anim;
     public Animator _animator;
-
-
 
     void Start()
     {

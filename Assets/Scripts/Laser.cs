@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
+
 
 public class Laser : MonoBehaviour
 {
@@ -20,10 +19,9 @@ public class Laser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DetectEnemy();
+        
         if(_isEnemyLaser  == false)
         {
-            HomingProjectile();
             MoveUp();
         }
         else
@@ -47,27 +45,6 @@ public class Laser : MonoBehaviour
         }
     }
 
-    private void DetectEnemy()
-    {
-        if (_enemy == null)
-        {
-            return;
-        }
-        float distance = Vector2.Distance(transform.position, _enemy.transform.position);
-
-    }
-
-    private void HomingProjectile()
-    {
-        if (_enemy == null)
-        {
-            return;
-        }
-        Vector2 direction = (_enemy.transform.position - transform.position).normalized;
-
-        transform.position += (Vector3)(direction * _ramSpeed * Time.deltaTime);
-
-    }
 
     void MoveDown()
     {

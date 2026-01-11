@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
@@ -14,17 +15,21 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] 
     private GameObject _powerUpContainer;
     [SerializeField]
+    private GameObject _asteroidContainer;
+    [SerializeField]
     private bool _stopSpawning = false;
     private int _firstWave = 10;
     private int _incrementWaveBy = 10;
     private int _currentWave = 1;
     private int _skip;
     private GameObject _enemy;
+    private GameObject _asteroid;
 
     public void StartSpawning()
     {
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUpRoutine());
+        StartCoroutine(SpawnAsteroidRoutine());
     }
     
     IEnumerator SpawnPowerUpRoutine()
@@ -44,6 +49,20 @@ public class SpawnManager : MonoBehaviour
             }
             Instantiate(_powerups[randomPowerUp], posToSpawn, Quaternion.identity);
             yield return new WaitForSeconds(20.0f);
+        }
+    }
+
+    IEnumerator SpawnAsteroidRoutine()
+    {
+        yield return new WaitForSeconds(3.0f);
+
+        while(_stopSpawning == false)
+        {
+            Vector3 posToSpawn = new Vector3(Random.Range( - 8f, 8f), 5, 0);
+            _asteroid = Instantiate(_asteroid, posToSpawn, Quaternion.identity);
+            _enemy.transform.parent = _asteroidContainer.transform;
+            
+
         }
     }
 
@@ -69,6 +88,11 @@ public class SpawnManager : MonoBehaviour
             _stopSpawning || _enemyContainer != null && _enemyContainer.transform.childCount == 0);
 
             yield return new WaitForSeconds(3.0f);
+
+            if(_currentWave == 3)
+            {
+                BossSpawn();
+            }
 
             _currentWave++;
         }

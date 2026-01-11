@@ -20,6 +20,9 @@ public class UIManager : MonoBehaviour
     private GameManager _gameManager;
     [SerializeField]
     private TMP_Text _ammoIsEmptyText;
+    [SerializeField]
+    private TMP_Text _nextWave;
+
 
     void Start()
     {
@@ -62,6 +65,22 @@ public class UIManager : MonoBehaviour
         _restartText.gameObject.SetActive(true );
 
         StartCoroutine(GameOverFlickerRoutine());
+    }
+
+    public void NextWave()
+    {
+            StartCoroutine(NextWaveFlickerRoutine());
+    }
+
+    IEnumerator NextWaveFlickerRoutine()
+    {
+        while (true)
+        {
+            _nextWave.text = "Next Wave";
+            yield return new WaitForSeconds(0.5f);
+            _nextWave.text = " ";
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     IEnumerator GameOverFlickerRoutine()

@@ -55,8 +55,6 @@ public class Player : MonoBehaviour
     private int _ammoAmount = 15;
     private Animator _anim;
     public Animator _animator;
-    [SerializeField]
-    private PowerUp _powerup;
 
 
 
@@ -65,7 +63,6 @@ public class Player : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
 
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
-        _powerup = GameObject.Find("Spawn_Manager").GetComponent<PowerUp>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
         _audioSource = GetComponent<AudioSource>();
@@ -97,6 +94,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire )
         {
             FireLaser();
+
         }
 
     }

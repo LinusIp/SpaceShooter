@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
     private TMP_Text _nextWave;
 
 
+
     void Start()
     {
         _scoreText.text = "Score: " + 0;

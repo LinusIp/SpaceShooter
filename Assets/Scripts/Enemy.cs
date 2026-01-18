@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
         _anim = GetComponent<Animator>();
         _startPos = transform.position;
-
+        
         if (_player == null) Debug.LogError("Player is NULL on Enemy.");
         if (_anim == null) _anim = GetComponentInChildren<Animator>();
     }
@@ -135,6 +135,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Laser laserScript = other.GetComponent<Laser>();
         if (other.CompareTag("Player"))
         {
             if (_isShieldActive)
@@ -147,7 +148,7 @@ public class Enemy : MonoBehaviour
                 EnemyDeath();
             }
         }
-        else if (other.CompareTag("Laser"))
+        else if (other.CompareTag("Laser") && laserScript._isEnemyLaser == false )
         {
             Destroy(other.gameObject);
             if (_isShieldActive)

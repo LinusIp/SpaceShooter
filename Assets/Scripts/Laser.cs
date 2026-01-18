@@ -8,7 +8,7 @@ public class Laser : MonoBehaviour
     private float _ramSpeed = 6.0f;
     private Enemy _enemy;
 
-    private bool _isEnemyLaser = false;
+    public bool _isEnemyLaser = false;
     // Start is called before the first frame update
     void Start()
     {

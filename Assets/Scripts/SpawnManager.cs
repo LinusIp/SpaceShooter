@@ -1,4 +1,4 @@
-
+using System.Collections;
 using UnityEngine;
 
 
@@ -30,7 +30,6 @@ public class SpawnManager : MonoBehaviour
     {
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerUpRoutine());
-        StartCoroutine(SpawnAsteroidRoutine());
     }
     
     IEnumerator SpawnPowerUpRoutine()
@@ -50,20 +49,6 @@ public class SpawnManager : MonoBehaviour
             }
             Instantiate(_powerups[randomPowerUp], posToSpawn, Quaternion.identity);
             yield return new WaitForSeconds(20.0f);
-        }
-    }
-
-    IEnumerator SpawnAsteroidRoutine()
-    {
-        yield return new WaitForSeconds(3.0f);
-
-        while(_stopSpawning == false)
-        {
-            Vector3 posToSpawn = new Vector3(Random.Range( - 8f, 8f), 5, 0);
-            _asteroid = Instantiate(_asteroid, posToSpawn, Quaternion.identity);
-            _enemy.transform.parent = _asteroidContainer.transform;
-            
-
         }
     }
 

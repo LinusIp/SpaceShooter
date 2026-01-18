@@ -1,5 +1,7 @@
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class Player : MonoBehaviour
@@ -55,6 +57,10 @@ public class Player : MonoBehaviour
     private int _ammoAmount = 15;
     private Animator _anim;
     public Animator _animator;
+    [SerializeField]
+    private Slider _thrustGauge;
+    private float _totalFuel = 100;
+    private bool _isThrusting = false;
 
     void Start()
     {
@@ -62,9 +68,14 @@ public class Player : MonoBehaviour
 
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-
+        _thrustGauge = GameObject.Find("Thruster_Slider").GetComponent<Slider>();
         _audioSource = GetComponent<AudioSource>();
         _anim = GetComponent<Animator>();
+
+        if( _thrustGauge == null)
+        {
+            Debug.LogError("The Thrust Controller Component is NULL!");
+        }
 
         if (_spawnManager == null)
         {
@@ -94,6 +105,20 @@ public class Player : MonoBehaviour
             FireLaser();
 
         }
+        _thrustGauge.value = _totalFuel;
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isThrusting();
+            updateThrustGauge(-2);
+            _thrustRenderer.color = boost_color;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            stopThrusting();
+        }
+        regenThruster();
+        
+       
 
     }
     void CalculateMovement()
@@ -103,7 +128,7 @@ public class Player : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
-        SpeedBooster();
+      
 
         transform.Translate(direction * _speed * Time.deltaTime);
 
@@ -120,19 +145,30 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void SpeedBooster()
+    private void isThrusting()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            _speed = _speed * 2;
-            _thrustRenderer.color = boost_color;
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            _speed = _speed / 2;
-            _thrustRenderer.color = normal_color;
-        }
+        _isThrusting = true;
+        _speed = 6;
+
     }
+
+    private void stopThrusting()
+    {
+        _isThrusting = false;
+        _speed = 3;
+    }
+
+    public void updateThrustGauge(float currentFuel)
+    {
+        if(_totalFuel - currentFuel <= 0)
+        {
+            stopThrusting();
+        }
+        _totalFuel += currentFuel;
+    }
+
+
+
 
     void FireLaser()
     {
@@ -244,6 +280,31 @@ public class Player : MonoBehaviour
         _isSpeedBoostActive = true;
         _speed *= _speedMultiplier;
         StartCoroutine(SpeedBoostPowerDownRoutine());
+    }
+
+    private void regenThruster()
+    {
+        StartCoroutine(ThrustRoutine());
+        StartCoroutine(ThrustRegenRoutine());
+    }
+
+    IEnumerator ThrustRoutine()
+    {
+        while(_isThrusting == true)
+        {
+
+            updateThrustGauge(-20);
+            yield return new WaitForSeconds(1.0f);
+        }
+    }
+
+    IEnumerator ThrustRegenRoutine()
+    {
+        while(_isThrusting == true)
+        {
+            updateThrustGauge(+20);
+            yield return new WaitForSeconds(1.0f);
+        }
     }
 
     IEnumerator SpeedBoostPowerDownRoutine()

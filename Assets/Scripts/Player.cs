@@ -61,6 +61,10 @@ public class Player : MonoBehaviour
     private Slider _thrustGauge;
     private float _totalFuel = 100;
     private bool _isThrusting = false;
+    [SerializeField] private float _magnetRadius = 6f;
+    [SerializeField] private float _magnetPullSpeed = 10f;
+    private bool _isMagnetActive = false;
+
 
     void Start()
     {
@@ -71,8 +75,8 @@ public class Player : MonoBehaviour
         _thrustGauge = GameObject.Find("Thruster_Slider").GetComponent<Slider>();
         _audioSource = GetComponent<AudioSource>();
         _anim = GetComponent<Animator>();
-
-        if( _thrustGauge == null)
+        StartCoroutine(ThrusterRoutine());
+        if ( _thrustGauge == null)
         {
             Debug.LogError("The Thrust Controller Component is NULL!");
         }
@@ -100,25 +104,35 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+        if (Input.GetKey(KeyCode.C))
+        {
+            _isMagnetActive = true;
+        }
+        else
+        {
+            _isMagnetActive = false;
+        }
+
+
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire )
         {
             FireLaser();
 
         }
         _thrustGauge.value = _totalFuel;
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && _totalFuel > 0)
         {
             isThrusting();
-            updateThrustGauge(-2);
             _thrustRenderer.color = boost_color;
         }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        else
         {
             stopThrusting();
+            _thrustRenderer.color = normal_color;
         }
-        regenThruster();
-        
-       
+
+
+
 
     }
     void CalculateMovement()
@@ -158,14 +172,6 @@ public class Player : MonoBehaviour
         _speed = 3;
     }
 
-    public void updateThrustGauge(float currentFuel)
-    {
-        if(_totalFuel - currentFuel <= 0)
-        {
-            stopThrusting();
-        }
-        _totalFuel += currentFuel;
-    }
 
 
 
@@ -282,30 +288,46 @@ public class Player : MonoBehaviour
         StartCoroutine(SpeedBoostPowerDownRoutine());
     }
 
-    private void regenThruster()
-    {
-        StartCoroutine(ThrustRoutine());
-        StartCoroutine(ThrustRegenRoutine());
-    }
 
-    IEnumerator ThrustRoutine()
+
+    IEnumerator ThrusterRoutine()
     {
-        while(_isThrusting == true)
+        while (true)
         {
+            if (_isThrusting && _totalFuel > 0)
+            {
+                updateThrustGauge(-20f * Time.deltaTime);
+            }
+            else if (!_isThrusting && _totalFuel < 100)
+            {
+                updateThrustGauge(+15f * Time.deltaTime);
+            }
 
-            updateThrustGauge(-20);
-            yield return new WaitForSeconds(1.0f);
+            yield return null;
         }
     }
 
-    IEnumerator ThrustRegenRoutine()
+    public bool IsMagnetActive()
     {
-        while(_isThrusting == true)
-        {
-            updateThrustGauge(+20);
-            yield return new WaitForSeconds(1.0f);
-        }
+        return _isMagnetActive;
     }
+
+    public float GetMagnetRadius()
+    {
+        return _magnetRadius;
+    }
+
+    public float GetMagnetSpeed()
+    {
+        return _magnetPullSpeed;
+    }
+
+
+    public void updateThrustGauge(float amount)
+    {
+        _totalFuel = Mathf.Clamp(_totalFuel + amount, 0f, 100f);
+    }
+
 
     IEnumerator SpeedBoostPowerDownRoutine()
     {

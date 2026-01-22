@@ -5,6 +5,17 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - _laserPrefab: {fileID: 7511562232256030822, guid: 5feac9592b9d33f4d81a9ab5a0da8d87, type: 3}
+  - _tripleShotPrefab: {fileID: 964372602584355719, guid: c5e30c0199cebc047b994f3275b444d8, type: 3}
+  - _multiDirectionPrefab: {instanceID: 0}
+  - _shieldVizualizer: {instanceID: 0}
+  - _rightEngine: {instanceID: 0}
+  - _leftEngine: {instanceID: 0}
+  - _laserSoundClip: {instanceID: 0}
+  - _audioSource: {instanceID: 0}
+  - _thrustRenderer: {instanceID: 0}
+  - _shieldRenderer: {instanceID: 0}
+  - _animator: {instanceID: 0}
+  - _thrustGauge: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

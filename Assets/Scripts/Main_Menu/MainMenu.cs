@@ -10,5 +10,13 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene(1); //game scene
     }
+    public void LoadInstruction()
+    {
+        SceneManager.LoadScene(2);
+    }
+    public void Back()
+    {
+        SceneManager.LoadScene(0);
+    }
 }
  

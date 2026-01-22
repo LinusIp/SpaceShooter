@@ -184,7 +184,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2006084171
   m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 1b4a8fdd39d3a45d0a9ee484ad6800ec, type: 3}
   m_Color: {r: 1, g: 0.99215686, b: 1, a: 1}
   m_FlipX: 0
@@ -273,6 +273,8 @@ MonoBehaviour:
   _shieldRenderer: {fileID: 630615839}
   _animator: {fileID: 1564789638}
   _thrustGauge: {fileID: 876876112}
+  _magnetRadius: 6
+  _magnetPullSpeed: 10
 --- !u!82 &64184235
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1734,8 +1736,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2006084171
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a45d21c30e0154a9ca1a5d6fb2bf3cfa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

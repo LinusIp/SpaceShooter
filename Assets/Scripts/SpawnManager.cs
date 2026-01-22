@@ -25,6 +25,11 @@ public class SpawnManager : MonoBehaviour
     private GameObject _enemy;
     private GameObject _asteroid;
     private bool _isBossSpawn = false;
+    [SerializeField] private int _maxEnemyWaves = 3;
+    [SerializeField] private int _maxWavesBeforeBoss = 3;
+    private bool _bossSpawned = false;
+
+
 
     public void StartSpawning()
     {
@@ -57,37 +62,48 @@ public class SpawnManager : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
 
         while (_stopSpawning == false)
-        {   
-            int enemiesInThisWave = _firstWave + (_incrementWaveBy * (_currentWave - 1));
-            for(int i = 0; i < enemiesInThisWave; i++)
+        {
+            //  AFTER 3 WAVES  SPAWN BOSS  STOP
+            if (_currentWave > _maxWavesBeforeBoss)
             {
-
-                if(i < 12)
+                if (!_bossSpawned)
                 {
-                    if (i % 5 == 0 && i != 0)
-                    {
-                        EnemySpawn();
-                        Enemy enemy = _enemy.transform.GetComponent<Enemy>();
-                        enemy.EnemyShieldActive();
-                    }
-                    yield return new WaitForSeconds(2.0f);
-                    EnemySpawn();
+                    SpawnBoss();
+                    _bossSpawned = true;
                 }
-               
+
+                yield break; // stop spawning enemies forever
             }
-            yield return new WaitUntil(() =>
-            _stopSpawning || _enemyContainer != null && _enemyContainer.transform.childCount == 0);
 
-            yield return new WaitForSeconds(3.0f);
+            int enemiesInThisWave =
+                _firstWave + (_incrementWaveBy * (_currentWave - 1));
 
-            _currentWave++;
-
-            if(_currentWave  == 2)
+            for (int i = 0; i < enemiesInThisWave; i++)
             {
-                BossSpawn();
+                EnemySpawn();
+
+                // Shielded enemies
+                if (i % 5 == 0 && i != 0)
+                {
+                    Enemy enemy = _enemy.GetComponent<Enemy>();
+                    enemy.EnemyShieldActive();
+                }
+
+                yield return new WaitForSeconds(2.0f);
             }
+
+            // Wait until ALL enemies are dead
+            yield return new WaitUntil(() =>
+                _stopSpawning ||
+                (_enemyContainer != null &&
+                 _enemyContainer.transform.childCount == 0));
+
+            yield return new WaitForSeconds(2.0f);
+            _currentWave++;
         }
     }
+
+
 
     private void EnemySpawn()
     {
@@ -96,12 +112,13 @@ public class SpawnManager : MonoBehaviour
         _enemy.transform.parent = _enemyContainer.transform;
     }
 
-    private void BossSpawn()
+    private void SpawnBoss()
     {
-        Vector3 posToSpawn = new Vector3(0, 2, 0);
-        _enemy = Instantiate(_bossPrefab, posToSpawn, Quaternion.identity);
-        _enemy.transform.parent = _enemyContainer.transform;
+        Vector3 spawnPos = new Vector3(0, 2, 0);
+        GameObject boss = Instantiate(_bossPrefab, spawnPos, Quaternion.identity);
+        boss.transform.parent = _enemyContainer.transform;
     }
+
 
     public void OnPlayerDeath()
     {

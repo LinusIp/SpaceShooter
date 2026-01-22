@@ -80,9 +80,18 @@ public class Enemy : MonoBehaviour
         _canFire = Time.time + _fireRate;
 
         Vector3 spawnPos = transform.position;
-        if (_backFire) spawnPos += new Vector3(0, 1.5f, 0); // Spawn slightly above if firing back
+        if (_backFire) spawnPos += new Vector3(0, 2f, 0); // Spawn slightly above if firing back
 
         GameObject enemyLaser = Instantiate(_laserPrefab, spawnPos, Quaternion.identity);
+
+        Collider2D enemyCol = GetComponent<Collider2D>();
+        Collider2D laserCol = enemyLaser.GetComponent<Collider2D>();
+
+        if (enemyCol != null && laserCol != null)
+        {
+            Physics2D.IgnoreCollision(laserCol, enemyCol);
+        }
+
         Laser[] lasers = enemyLaser.GetComponentsInChildren<Laser>();
 
         foreach (var laser in lasers)
@@ -98,19 +107,14 @@ public class Enemy : MonoBehaviour
 
         float distance = Vector2.Distance(transform.position, _player.transform.position);
 
-        // Logic for Ramming
-        if (distance <= _detectionRange && _player.transform.position.y < transform.position.y)
-        {
-            _isRamming = true;
-        }
-        else
-        {
-            _isRamming = false;
-        }
+        // Ramming: enemy above player
+        _isRamming = distance <= _detectionRange &&
+                     transform.position.y > _player.transform.position.y;
 
-        // Logic for Backfire (Player is above enemy)
-        _backFire = (_player.transform.position.y > transform.position.y);
+        // Backfire: enemy below player
+        _backFire = transform.position.y < _player.transform.position.y;
     }
+        
 
     private void DetectPowerUpNear()
     {

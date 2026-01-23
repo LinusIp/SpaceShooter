@@ -80,7 +80,7 @@ public class Enemy : MonoBehaviour
         _canFire = Time.time + _fireRate;
 
         Vector3 spawnPos = transform.position;
-        if (_backFire) spawnPos += new Vector3(0, 2f, 0); // Spawn slightly above if firing back
+        if (_backFire) spawnPos += new Vector3(0, 3f, 0); // Spawn slightly above if firing back
 
         GameObject enemyLaser = Instantiate(_laserPrefab, spawnPos, Quaternion.identity);
 

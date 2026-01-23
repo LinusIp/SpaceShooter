@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private TMP_Text _scoreText;
     [SerializeField]
+    private TMP_Text _ammoText;
+    [SerializeField]
     private Image _livesIMG;
     [SerializeField]
     private Sprite[] _liveSprites;
@@ -22,12 +24,14 @@ public class UIManager : MonoBehaviour
     private TMP_Text _ammoIsEmptyText;
     [SerializeField]
     private TMP_Text _nextWave;
+    private int ammo = 15;
 
 
 
     void Start()
     {
         _scoreText.text = "Score: " + 0;
+        _ammoText.text = "Ammo: " + 15;
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
 
@@ -43,7 +47,17 @@ public class UIManager : MonoBehaviour
     {
         _scoreText.text = "Score: " + playerScore.ToString();
     }
-    
+
+    public void UpdateAmmo(int ammoCount)
+    {
+        ammo -= ammoCount;
+        if(ammo <= 0)
+        {
+            ammo = 0;
+        }
+        _ammoText.text = "Ammo: " + ammo.ToString();
+    }
+
     public void UpdateLives(int currentLives)
     {
         if (currentLives < 0 || currentLives >= _liveSprites.Length)

@@ -117,6 +117,7 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > _canFire )
         {
             FireLaser();
+            _uiManager.UpdateAmmo(1);
 
         }
         _thrustGauge.value = _totalFuel;
@@ -200,15 +201,11 @@ public class Player : MonoBehaviour
             _audioSource.Play();
             _ammoAmount--;
         }
-        if(_isTripleShotActive == true)
-        {
-            _ammoAmount = 15;
-        }
-        else
+        if (_ammoAmount <= 0)
         {
             _uiManager.AmmoFlicker();
+            return;
         }
-        
         
     }
     public void Damage()

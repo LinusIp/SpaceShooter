@@ -48,3 +48,12 @@ TagManager:
   - name: Foreground
     uniqueID: 2288883125
     locked: 0
+  - name: Asteroid
+    uniqueID: 1375784599
+    locked: 0
+  - name: Player
+    uniqueID: 687169697
+    locked: 0
+  - name: New Layer 4
+    uniqueID: 1644601471
+    locked: 0
